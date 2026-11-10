@@ -65,12 +65,12 @@ export interface CreateBookingInput {
   distanceKm?: number;
 }
 
-/** Uses the map's road distance only when it is believable next to our own estimate. */
+/** Uses the map's road distance only when it is believable next to our own estimate. *
 function trustedDistance(mapKm: number | undefined, estimatedKm: number): number {
   if (typeof mapKm !== 'number' || !Number.isFinite(mapKm) || mapKm <= 0) return estimatedKm;
   if (mapKm < estimatedKm * 0.5 || mapKm > estimatedKm * 2.5) return estimatedKm;
   return Math.max(1, Math.round(mapKm));
-}
+}*/
 
 export function createBooking(input: CreateBookingInput): Result<Booking> {
   const { customerId, pickupLocation, destination, rideType } = input;
