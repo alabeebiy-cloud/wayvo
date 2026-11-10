@@ -4,7 +4,7 @@ import { CustomerLayout } from '../components/layout/CustomerLayout';
 import { PlaceholderPage } from '../components/layout/PlaceholderPage';
 import { PublicLayout } from '../components/layout/PublicLayout';
 import { RiderLayout } from '../components/layout/RiderLayout';
-import Login from '../pages/auth/Login';
+import Login from '../pages/auth/Login'; 
 import Register from '../pages/auth/Register';
 import BookRide from '../pages/customer/BookRide';
 import CustomerDashboard from '../pages/customer/Dashboard';

@@ -95,8 +95,9 @@ export function createBooking(input: CreateBookingInput): Result<Booking> {
   if (duplicate) return ok(duplicate);
 
   const fare = calculateFare(rideType, distanceKm);
+  const existing = new Set(bookings.map((b) => b.reference));
   let reference = generateReference();
-  while (bookings.some((b) => b.reference === reference)) reference = generateReference();
+  while (existing.has(reference)) reference = generateReference();
 
   const timestamp = nowIso();
   const booking: Booking = {
