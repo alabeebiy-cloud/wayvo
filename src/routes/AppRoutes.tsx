@@ -1,13 +1,16 @@
 import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { CustomerLayout } from '../components/layout/CustomerLayout';
-import { PlaceholderPage } from '../components/layout/PlaceholderPage';
 import { PublicLayout } from '../components/layout/PublicLayout';
 import { RiderLayout } from '../components/layout/RiderLayout';
-import Login from '../pages/auth/Login'; 
+import Login from '../pages/auth/Login';
 import Register from '../pages/auth/Register';
 import BookRide from '../pages/customer/BookRide';
+import BookingDetails from '../pages/customer/BookingDetails';
 import CustomerDashboard from '../pages/customer/Dashboard';
+import CustomerHistory from '../pages/customer/History';
+import Notifications from '../pages/customer/Notifications';
+import CustomerProfile from '../pages/customer/Profile';
 import Home from '../pages/public/Home';
 import HowItWorks from '../pages/public/HowItWorks';
 import NotFound from '../pages/public/NotFound';
@@ -39,10 +42,10 @@ export const AppRoutes: React.FC = () => (
         <Route element={<CustomerLayout />}>
           <Route path="/customer/dashboard" element={<CustomerDashboard />} />
           <Route path="/customer/book" element={<BookRide />} />
-          <Route path="/customer/bookings/:bookingId" element={<PlaceholderPage title="Booking details" stage={5} />} />
-          <Route path="/customer/history" element={<PlaceholderPage title="Ride history" stage={5} />} />
-          <Route path="/customer/profile" element={<PlaceholderPage title="Profile" stage={5} />} />
-          <Route path="/customer/notifications" element={<PlaceholderPage title="Notifications" stage={5} />} />
+          <Route path="/customer/bookings/:bookingId" element={<BookingDetails />} />
+          <Route path="/customer/history" element={<CustomerHistory />} />
+          <Route path="/customer/profile" element={<CustomerProfile />} />
+          <Route path="/customer/notifications" element={<Notifications />} />
         </Route>
       </Route>
 

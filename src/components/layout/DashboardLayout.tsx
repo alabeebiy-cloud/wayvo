@@ -7,6 +7,8 @@ import { cx } from '../../utils/cx';
 
 export interface NavItem {
   label: string;
+  /** A shorter name for the phone tab bar, where space is tight. */
+  short?: string;
   to: string;
   icon: React.ReactNode;
   badge?: number;
@@ -16,6 +18,12 @@ const itemClass = ({ isActive }: { isActive: boolean }): string =>
   cx(
     'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold transition-colors',
     isActive ? 'bg-brand-50 text-brand-800' : 'text-ink-700 hover:bg-ink-100',
+  );
+
+const tabClass = ({ isActive }: { isActive: boolean }): string =>
+  cx(
+    'relative flex h-16 flex-col items-center justify-center gap-1 px-1 text-[11px] font-semibold',
+    isActive ? 'text-brand-700' : 'text-ink-500',
   );
 
 const NavList: React.FC<{ items: NavItem[] }> = ({ items }) => (
@@ -37,7 +45,10 @@ const NavList: React.FC<{ items: NavItem[] }> = ({ items }) => (
   </ul>
 );
 
-/** Sidebar on desktop, collapsible menu on mobile. Pages render inside <Outlet />. */
+/**
+ * Sidebar on desktop. On a phone: a top bar with a menu, plus a tab bar fixed to the bottom
+ * so the main pages are one thumb-tap away. Pages render inside <Outlet />.
+ */
 export const DashboardLayout: React.FC<{ items: NavItem[]; areaLabel: string }> = ({ items, areaLabel }) => {
   const { user, logout } = useAuth();
   const location = useLocation();
@@ -79,7 +90,7 @@ export const DashboardLayout: React.FC<{ items: NavItem[]; areaLabel: string }> 
       </aside>
 
       <div className="min-w-0">
-        <header className="sticky top-0 z-30 border-b border-ink-100 bg-white/95 backdrop-blur lg:hidden">
+        <header className="sticky top-0 z-30 border-b border-ink-100 bg-white/95 pt-[env(safe-area-inset-top)] backdrop-blur lg:hidden">
           <div className="flex h-14 items-center justify-between px-4">
             <Link to="/" aria-label="Wayvo home"><Logo /></Link>
             <button
@@ -88,23 +99,45 @@ export const DashboardLayout: React.FC<{ items: NavItem[]; areaLabel: string }> 
               aria-expanded={open}
               aria-controls="dashboard-menu"
               aria-label={open ? 'Close menu' : 'Open menu'}
-              className="flex h-10 w-10 items-center justify-center rounded-lg hover:bg-ink-100"
+              className="flex h-11 w-11 items-center justify-center rounded-lg hover:bg-ink-100"
             >
               {open ? <X className="h-5 w-5" aria-hidden="true" /> : <Menu className="h-5 w-5" aria-hidden="true" />}
             </button>
           </div>
           {open && (
             <div id="dashboard-menu" className="max-h-[calc(100vh-3.5rem)] overflow-y-auto border-t border-ink-100 bg-white p-4">
-              <nav aria-label={areaLabel}><NavList items={items} /></nav>
+              <nav aria-label={`${areaLabel} menu`}><NavList items={items} /></nav>
               <div className="mt-4">{account}</div>
             </div>
           )}
         </header>
 
-        <div id="main" className="mx-auto max-w-5xl px-4 py-6 sm:px-8 sm:py-10">
+        <div id="main" className="mx-auto max-w-5xl px-4 py-6 pb-28 sm:px-8 sm:py-10 lg:pb-10">
           <Outlet />
         </div>
       </div>
+
+      {/* Phone tab bar */}
+      <nav aria-label={`${areaLabel} tabs`} className="fixed inset-x-0 bottom-0 z-30 border-t border-ink-100 bg-white/95 pb-[env(safe-area-inset-bottom)] backdrop-blur lg:hidden">
+        <ul className="mx-auto flex max-w-xl">
+          {items.map((item) => (
+            <li key={item.to} className="min-w-0 flex-1">
+              <NavLink to={item.to} className={tabClass}>
+                <span className="relative">
+                  {item.icon}
+                  {item.badge ? (
+                    <span className="absolute -right-2.5 -top-1.5 min-w-[1rem] rounded-full bg-brand-600 px-1 text-center text-[10px] font-bold leading-4 text-white">
+                      {item.badge}
+                      <span className="sr-only"> unread</span>
+                    </span>
+                  ) : null}
+                </span>
+                <span className="max-w-full truncate">{item.short ?? item.label}</span>
+              </NavLink>
+            </li>
+          ))}
+        </ul>
+      </nav>
     </div>
   );
 };

@@ -38,7 +38,9 @@ export const RouteMap: React.FC<RouteMapProps> = ({ pickup, destination, path, c
   // Create the map once.
   useEffect(() => {
     if (!containerRef.current) return undefined;
-    const map = L.map(containerRef.current, { scrollWheelZoom: false }).setView(NIGERIA_CENTRE, 6);
+       // On a phone, dragging the map would trap your finger and stop the page from scrolling.
+    // So phones zoom with a pinch or the + and - buttons, and the map fits the route by itself.
+    const map = L.map(containerRef.current, { scrollWheelZoom: false, dragging: !L.Browser.mobile }).setView(NIGERIA_CENTRE, 6);
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 18,
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',

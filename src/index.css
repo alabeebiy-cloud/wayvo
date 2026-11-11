@@ -4,14 +4,22 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @layer base {
   html { scroll-behavior: smooth; }
   body {
     @apply bg-ink-50 font-sans text-ink-900 antialiased;
+    -webkit-tap-highlight-color: transparent;
   }
   h1, h2, h3, h4 { @apply font-display tracking-tight; }
   :focus-visible { @apply outline-none ring-2 ring-brand-500 ring-offset-2; }
+
+  /* Phones: no tap delay on controls */
+  button, a, [role='button'], summary { touch-action: manipulation; }
+
+  /* iPhones zoom into any field smaller than 16px and never zoom back. This stops that. */
+  @media (max-width: 767px) {
+    input, select, textarea { font-size: 16px; }
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
